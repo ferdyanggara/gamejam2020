@@ -5,38 +5,33 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    int health = Random.Range(10, 15);
+    int health;
     string currentWord;
     WordManager wordManager;
 
-    int attackSpeed = 9999; //poor implementation
+    float attackSpeed = 9999; //poor implementation
     float timeInterval = 0;
-    bool goAttack = false;
 
     public delegate void EnemyAttack();
     public static event EnemyAttack OnEnemyAttack;
-    public Enemy() //by logic, since enemy will be called during gameplay, wordmanager should exist already
+
+    public void Start()
     {
-        TypingManager.OnUpdateWord += CheckAttackWord;
+        health = Random.Range(10, 15);
         wordManager = WordManager.Instance;
         currentWord = wordManager.GetRandomWord();
+        attackSpeed = 5;
+        Debug.LogError(currentWord);
     }
-
     public void Update()
     {
-        if (goAttack) 
+        timeInterval += Time.deltaTime;
+        if (timeInterval > attackSpeed)
         {
-            timeInterval += Time.deltaTime;
-            if (timeInterval > attackSpeed)
-            {
-                OnEnemyAttack?.Invoke();
-            }
+            Debug.Log("ENEMY ATTACK!");
+            OnEnemyAttack?.Invoke();
+            timeInterval = 0;
         }
-    }
-
-    public void SetEnemyAttackSpeed(int speed) 
-    {
-        attackSpeed = speed;
 
     }
 
@@ -45,15 +40,25 @@ public class Enemy : MonoBehaviour
         return currentWord;
     }
 
-    public void CheckAttackWord(string sentWord) 
+    public bool CheckAttackWord(string sentWord) 
     {
-        if (sentWord == currentWord) Damaged(sentWord);
+        if (sentWord == currentWord.Trim()) 
+        { 
+            Damaged(sentWord); 
+            return true; 
+        }
+        else return false;
     }
 
     private void Damaged(string sentWord) 
     {
         health -= sentWord.Length;
-        if(health > 0) { currentWord = wordManager.GetDifferentWord(sentWord); }
+        if(health > 0) 
+        { 
+            currentWord = wordManager.GetDifferentWord(sentWord);
+            timeInterval = 0;
+            Debug.Log("Enemy New WORD " + currentWord);
+        }
     }
 
     public bool IsAlive() 

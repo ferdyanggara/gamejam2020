@@ -25,17 +25,15 @@ public class TypingManager : MonoBehaviour
     {
         if (Input.anyKeyDown) 
         {
-            Debug.Log("Input detected");
             if (Input.GetKeyDown("space"))
             {
+                Debug.Log("SENDING WORD" + currentWord);
                 OnSendWord?.Invoke(currentWord);
-                Debug.LogWarning(currentWord);
                 currentWord = "";
             }
 
             else 
             {
-                Debug.LogWarning(Input.inputString);
                 if (Input.inputString.Length > 0) 
                 {
                     currentWord += Input.inputString;

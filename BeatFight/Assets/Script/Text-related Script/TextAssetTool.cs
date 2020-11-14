@@ -7,6 +7,7 @@ public static class TextAssetTool
     public static string[] ReadTextAssetData(string filePath)
     {
         TextAsset textAsset = Resources.Load<TextAsset>(filePath);
+        if (textAsset == null) { Debug.LogError("TEXT NOT FOUND"); }
 
         return ReadTextAssetData(textAsset);
     }

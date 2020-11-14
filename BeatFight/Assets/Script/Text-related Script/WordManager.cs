@@ -12,8 +12,9 @@ public class WordManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        wordData = TextAssetTool.ReadTextAssetData("Word/english.txt");
-        if (wordData.Length > 0) { Debug.LogWarning("wordData has been initialized with " + wordData.Length + "words!"); }
+        wordData = TextAssetTool.ReadTextAssetData("Word/english");
+        if (wordData.Length > 0) { Debug.LogWarning("wordData has been initialized with " + wordData.Length + "words!");
+        }
     }
 
     public string GetRandomWord() 
